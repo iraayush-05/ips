@@ -571,22 +571,7 @@
             selectedBatch = '';
         }
         
-        // Auto-login demo (remove in production)
-        setTimeout(() => {
-            const demoNotice = document.createElement('div');
-            demoNotice.innerHTML = `
-                <div style="position: fixed; top: 20px; right: 20px; background: rgba(79, 172, 254, 0.9); 
-                           color: white; padding: 15px; border-radius: 8px; z-index: 1000; max-width: 300px;
-                           box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-                    <strong>Demo Mode</strong><br>
-                    Click any batch → Enter any username/password → Click Login
-                    <button onclick="this.parentElement.remove()" 
-                            style="float: right; background: none; border: none; color: white; 
-                                   cursor: pointer; font-size: 18px; margin-left: 10px;">×</button>
-                </div>
-            `;
-            document.body.appendChild(demoNotice);
-        }, 2000);
+        
     </script>
 </body>
 </html>
