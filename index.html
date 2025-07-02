@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPS Academy - Student Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            min-height: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-section {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .batch-selection {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .batch-card {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .batch-card:hover {
+            border-color: #4facfe;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .batch-card.selected {
+            border-color: #4facfe;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .dashboard {
+            display: none;
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .course-list {
+            list-style: none;
+        }
+
+        .course-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-list li:last-child {
+            border-bottom: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.3s ease;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff3742;
+        }
+
+        @media (max-width: 768px) {
+            .login-section {
+                flex-direction: column;
+            }
+            
+            .login-left {
+                padding: 20px;
+            }
+            
+            .container {
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection" class="login-section">
+            <div class="login-left">
+                <div class="logo">IPS</div>
+                <h1>IPS Academy</h1>
+                <p>Student Learning Management System</p>
+                <p>Access your courses, assignments, and academic resources</p>
+            </div>
+            
+            <div class="login-right">
+                <div class="login-form">
+                    <h2>Select Your Portal</h2>
+                    
+                    <div class="batch-selection">
+                        <div class="batch-card" data-batch="faculty">
+                            <h3>Faculty LMS</h3>
+                            <p>1st, 2nd, 3rd & 4th Year</p>
+                        </div>
+                        
+                        <div class="batch-card" data-batch="2025">
+                            <h3>CMS</h3>
+                            <p>2025 Passout Batch</p>
+                        </div>
+                        
+                        <div class="batch-card" data-batch="2024">
+                            <h3>CMS</h3>
+                            <p>2024 Passout Batch</p>
+                        </div>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username / Student ID</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">Login to Portal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="dashboard hidden">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Welcome, <span id="studentName">Student</span></h1>
+                    <p>Batch: <span id="selectedBatch">2025</span></p>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <div class="dashboard-nav">
+                <div class="nav-item active" onclick="showContent('courses')">My Courses</div>
+                <div class="nav-item" onclick="showContent('assignments')">Assignments</div>
+                <div class="nav-item" onclick="showContent('grades')">Grades</div>
+                <div class="nav-item" onclick="showContent('schedule')">Schedule</div>
+            </div>
+            
+            <div id="coursesContent" class="dashboard-content">
+                <div class="card">
+                    <h3>Current Courses</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>Data Structures & Algorithms</span>
+                            <span>85%</span>
+                        </li>
+                        <li>
+                            <span>Database Management Systems</span>
+                            <span>92%</span>
+                        </li>
+                        <li>
+                            <span>Computer Networks</span>
+                            <span>78%</span>
+                        </li>
+                        <li>
+                            <span>Software Engineering</span>
+                            <span>88%</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Overall Progress</h3>
+                    <p>Semester Progress</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <p>75% Complete</p>
+                    
+                    <p style="margin-top: 20px;">Assignment Completion</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                    <p>90% Complete</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Recent Activities</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>Assignment submitted: DSA Lab</span>
+                            <span>2 days ago</span>
+                        </li>
+                        <li>
+                            <span>Quiz completed: DBMS</span>
+                            <span>5 days ago</span>
+                        </li>
+                        <li>
+                            <span>Lab report submitted: CN</span>
+                            <span>1 week ago</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="assignmentsContent" class="dashboard-content hidden">
+                <div class="card">
+                    <h3>Pending Assignments</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>Database Design Project</span>
+                            <span style="color: #ff4757;">Due: Tomorrow</span>
+                        </li>
+                        <li>
+                            <span>Network Security Report</span>
+                            <span style="color: #ffa502;">Due: 3 days</span>
+                        </li>
+                        <li>
+                            <span>Algorithm Analysis</span>
+                            <span style="color: #2ed573;">Due: 1 week</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Submitted Assignments</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>Data Structure Implementation</span>
+                            <span style="color: #2ed573;">Grade: A</span>
+                        </li>
+                        <li>
+                            <span>SQL Query Optimization</span>
+                            <span style="color: #2ed573;">Grade: A+</span>
+                        </li>
+                        <li>
+                            <span>System Design Document</span>
+                            <span style="color: #ffa502;">Pending Review</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="gradesContent" class="dashboard-content hidden">
+                <div class="card">
+                    <h3>Current Semester Grades</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>Data Structures & Algorithms</span>
+                            <span style="color: #2ed573;">A (85%)</span>
+                        </li>
+                        <li>
+                            <span>Database Management Systems</span>
+                            <span style="color: #2ed573;">A+ (92%)</span>
+                        </li>
+                        <li>
+                            <span>Computer Networks</span>
+                            <span style="color: #ffa502;">B+ (78%)</span>
+                        </li>
+                        <li>
+                            <span>Software Engineering</span>
+                            <span style="color: #2ed573;">A (88%)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Academic Summary</h3>
+                    <p><strong>Current CGPA:</strong> 8.6</p>
+                    <p><strong>Credits Completed:</strong> 120/160</p>
+                    <p><strong>Class Rank:</strong> 15/180</p>
+                    <p><strong>Attendance:</strong> 92%</p>
+                </div>
+            </div>
+            
+            <div id="scheduleContent" class="dashboard-content hidden">
+                <div class="card">
+                    <h3>Today's Schedule</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>9:00 AM - Database Systems</span>
+                            <span>Room 201</span>
+                        </li>
+                        <li>
+                            <span>11:00 AM - Algorithm Design</span>
+                            <span>Room 305</span>
+                        </li>
+                        <li>
+                            <span>2:00 PM - Network Lab</span>
+                            <span>Lab 1</span>
+                        </li>
+                        <li>
+                            <span>4:00 PM - Software Engineering</span>
+                            <span>Room 102</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Upcoming Exams</h3>
+                    <ul class="course-list">
+                        <li>
+                            <span>DBMS Mid-term</span>
+                            <span style="color: #ff4757;">July 8, 2025</span>
+                        </li>
+                        <li>
+                            <span>DSA Practical Exam</span>
+                            <span style="color: #ffa502;">July 12, 2025</span>
+                        </li>
+                        <li>
+                            <span>CN Theory Exam</span>
+                            <span style="color: #2ed573;">July 20, 2025</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedBatch = '';
+        
+        // Batch selection
+        document.querySelectorAll('.batch-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.batch-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedBatch = this.dataset.batch;
+            });
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedBatch) {
+                alert('Please select a portal/batch first');
+                return;
+            }
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                // Simulate login
+                document.getElementById('studentName').textContent = username;
+                document.getElementById('selectedBatch').textContent = selectedBatch.toUpperCase();
+                
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('dashboardSection').classList.remove('hidden');
+            }
+        });
+        
+        // Navigation
+        function showContent(contentType) {
+            // Hide all content
+            document.querySelectorAll('.dashboard-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(contentType + 'Content').classList.remove('hidden');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+        
+        // Logout function
+        function logout() {
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('loginForm').reset();
+            document.querySelectorAll('.batch-card').forEach(c => c.classList.remove('selected'));
+            selectedBatch = '';
+        }
+        
+        // Auto-login demo (remove in production)
+        setTimeout(() => {
+            const demoNotice = document.createElement('div');
+            demoNotice.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: rgba(79, 172, 254, 0.9); 
+                           color: white; padding: 15px; border-radius: 8px; z-index: 1000; max-width: 300px;
+                           box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <strong>Demo Mode</strong><br>
+                    Click any batch → Enter any username/password → Click Login
+                    <button onclick="this.parentElement.remove()" 
+                            style="float: right; background: none; border: none; color: white; 
+                                   cursor: pointer; font-size: 18px; margin-left: 10px;">×</button>
+                </div>
+            `;
+            document.body.appendChild(demoNotice);
+        }, 2000);
+    </script>
+</body>
+</html>
